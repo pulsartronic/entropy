@@ -26,10 +26,12 @@ contract ABCEntropy {
 	uint256 public gas_price;
 
 	ArbSys arb_sys;
+
+    // https://eips.ethereum.org/EIPS/eip-2935
 	address constant HISTORY = 0x0000F90827F1C53a10cb7A02335B175320002935;
 
     event RequestEvent(address app, bytes32 callback_id, uint256 gas_limit, bytes32 hash_record_id);
-    event CallbackFailedEvent(address indexed app, bytes32 callback_id);
+    event CallbackFailedEvent(address indexed app, bytes32 indexed callback_id);
 
 	constructor(uint256 new_fee, uint256 new_gas_price) {
         owner = msg.sender;
@@ -70,6 +72,7 @@ contract ABCEntropy {
         
         request_data.entropy_a = entropy_a;
         request_data.block_number = arb_sys.arbBlockNumber();
+        //request_data.block_number = block.number;
 
         emit RequestEvent(msg.sender, callback_id, gas_limit, hash_record_id);
     }
@@ -89,7 +92,7 @@ contract ABCEntropy {
     function verify(bytes32 hash, EntropyRequest memory entropy_request, EntropyResponse calldata entropy_response) external view returns (Verified memory verified) {
         // ENTROPY B
         bytes32 entropy_b = entropy_response.entropy_b;
-        verified.b = hash == sha256(bytes.concat(entropy_b));
+        verified.b = hash == keccak256(bytes.concat(entropy_b));
         
         // ENTROPY C
         bytes32 entropy_c = entropy_response.entropy_c; // fallback value.
@@ -100,7 +103,7 @@ contract ABCEntropy {
         
         // ABC ENTROPY
         bytes memory abc_seed = bytes.concat(entropy_request.entropy_a, entropy_b, entropy_c);
-        verified.random_number = sha256(abc_seed);
+        verified.random_number = keccak256(abc_seed);
         
         // RETURN COMMITMENT FOR A FUTURE ROUND
         verified.next_hash_record.id = entropy_b;
