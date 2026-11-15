@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 // Shared definitions, structs and interfaces.
-import "./Definitions.sol";
+import "@pulsartronic/entropy/Definitions.sol";
 
 /**
  * @notice Data structure representing the response payload returned by the oracle
@@ -173,8 +173,8 @@ contract ABCEntropy is IABCEntropy {
         request_data.entropy_a = entropy_a;
         
         // Capture the current L2 block number via the Arbitrum precompile for future hash retrieval
-        request_data.block_number = arb_sys.arbBlockNumber();
-        // request_data.block_number = block.number; // Alternative block number fallback if deployed on non-Arbitrum networks
+        // request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
+        request_data.block_number = block.number;
 
         // Emit the request event for off-chain oracle listeners
         emit RequestEvent(msg.sender, callback_id, gas_limit, hash_record_id);

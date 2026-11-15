@@ -40,7 +40,7 @@ contract ABCEntropyExample is IEntropyConsumer {
      */
     constructor() {
         // Arbitrum Sepolia example address. This should be configured per target network.
-        abc_entropy = IABCEntropy(0xd7Ca4e99F7C171B9ea2De80d3363c47009afaC5F);
+        abc_entropy = IABCEntropy(0x295A56c7ed8083c33c23C125187A0E840dc7E379);
     }
 
     /**
@@ -64,7 +64,7 @@ contract ABCEntropyExample is IEntropyConsumer {
         bytes32 callback_id = bytes32(uint256(uint160(msg.sender)));
 
         // Define the gas limit allocated for the callback execution (can be statically pre-calculated based on logic).
-        uint256 callback_gas_limit = 50000;
+        uint256 callback_gas_limit = 80000;
         
         // Compute the total fee required by the oracle contract.
         uint256 fee = abc_entropy.get_fee(callback_gas_limit);

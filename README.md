@@ -116,7 +116,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 ### Testnets
 | Network | Contract |
 |---|---|
-| Ethereum | `0x492170C151777b7839d9c4cDD58448f0Deca9bcB` |
+| Ethereum | `0x21Db33aabe6b1Bb04d134ec9dEb59D6549304024` |
 | Arbitrum | `0x295A56c7ed8083c33c23C125187A0E840dc7E379` |
 
 
