@@ -149,4 +149,4 @@ We mitigate this risk by letting you choose your preferred sequencer from an ope
 
 ## License
 
-MIT © 2026 Nudge
+MIT © 2026 pulsartronic
