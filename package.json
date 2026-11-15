@@ -1,6 +1,6 @@
 {
   "name": "@pulsartronic/entropy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Commit-reveal entropy definitions and interfaces for Solidity",
   "files": [
     "Definitions.sol"
