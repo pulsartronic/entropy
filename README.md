@@ -28,7 +28,7 @@ As long as we aren't running the sequencer, the system remains tamper-proof, eve
 
 
 ## Getting started: consuming entropy from a contract
-(see [source code](./EntropyConsumerExample.sol) to see a commented version)
+Below is an example consumer contract implementing `IEntropyConsumer` (see [`ABCEntropyExample.sol`](./ABCEntropyExample.sol) for the full source code and detailed inline comments):
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
@@ -112,7 +112,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 
 ## Security model
 
-Security model explanation...
+Security model details and threat analysis coming soon...
 
 ## License
 
