@@ -101,7 +101,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 ## Features
 
 - **Verifiable:** every number ships with a proof that anyone can check on-chain.
-- **Fast:** results arrive in your callback within [X] seconds on supported chains.
+- **Fast:** results arrive in your callback within a few seconds on supported chains.
 - **Predictable cost:** the fee for a request is readable from the contract with `get_fee(callback_gas_limit)`.
 - **Simple to integrate:** one request function, one callback. No off-chain infrastructure to run.
 
@@ -110,13 +110,11 @@ contract ABCEntropyExample is IEntropyConsumer {
 ### Mainnets
 | Network | Contract |
 |---|---|
-| Ethereum | `0x0000000000000000000000000000000000000000` |
 | Arbitrum | `0x0000000000000000000000000000000000000000` |
 
 ### Testnets
 | Network | Contract |
 |---|---|
-| Ethereum | `0x0000…0000` |
 | Arbitrum | `0x295A56c7ed8083c33c23C125187A0E840dc7E379` |
 
 

@@ -172,8 +172,8 @@ contract ABCEntropy is IABCEntropy {
         // Store seed A in the request structure
         request_data.entropy_a = entropy_a;
         
-        // Capture the current L2 block number via the Arbitrum precompile for future hash retrieval
-        // request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
+        // Capture the current block number.
+        //request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
         request_data.block_number = block.number;
 
         // Emit the request event for off-chain oracle listeners
