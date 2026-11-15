@@ -47,7 +47,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 
     constructor() {
         // Arbitrum Sepolia example address.
-        abc_entropy = IABCEntropy(0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f);
+        abc_entropy = IABCEntropy(0x295A56c7ed8083c33c23C125187A0E840dc7E379);
     }
 
     function get_entropy(bytes32 user_entropy) external payable {
