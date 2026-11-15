@@ -1,8 +1,8 @@
 # ABC Entropy
 
-**Randomness your contract can prove.**
+**Verifiable, tamper-proof randomness for your smart contracts.**
 
-This simple system delivers verifiable random numbers to your dapp, checkable on-chain.
+ABC Entropy is a lightweight commit-reveal randomness oracle designed to deliver verifiable, on-chain random numbers to your dApp with minimal friction.
 
 ---
 
