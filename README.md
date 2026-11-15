@@ -139,7 +139,7 @@ The final random number is derived by combining three independent entropy source
 The core challenge in building a verifiable random number oracle is preventing us from acting as a privileged user within your dApp.
 
 ABC Entropy neutralizes this threat through **Entropy C**:
-- Because Entropy C is generated **after** our commitment (but before revealing it) and **after** your request, neither you nor us nor the sequencer can know all A, B and C values in advance. 
+- Because Entropy C is generated **after** our commitment (but before revealing it) and **after** your dApp request, neither you nor us nor the sequencer can know all A, B and C values in advance. 
 - Even though we could know Entropies A and B in advance (by acting as a user), the unpredictable nature of C prevents any pre-calculation or manipulation of the final result.
 
 ### Trust Assumptions
