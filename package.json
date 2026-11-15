@@ -1,0 +1,22 @@
+{
+  "name": "@pulsartronic/entropy",
+  "version": "1.0.0",
+  "description": "Commit-reveal entropy definitions and interfaces for Solidity",
+  "files": [
+    "Definitions.sol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pulsartronic/entropy.git"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "arbitrum",
+    "entropy",
+    "randomness",
+    "commit-reveal"
+  ],
+  "author": "pulsartronic",
+  "license": "MIT"
+}

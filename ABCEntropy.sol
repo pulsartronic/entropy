@@ -205,13 +205,15 @@ contract ABCEntropy is IABCEntropy {
     }
 
     /**
-     * @notice Verifies the oracle's entropy response against a hash commitment and generates the final random number
-     * @dev Validates entropy B against the expected hash, obtains entropy C from HISTORY, combines entropy A, B and C to derive the final random number, 
-     *      and prepares the commitment record for the subsequent round.
-     * @param hash The expected hash commitment to verify against entropy B
-     * @param entropy_request The original request structure containing seed A and request metadata
-     * @param entropy_response The response payload containing seed B, response data, and the next round's hash commitment
-     * @return verified The populated Verified struct containing verification status, the final random number, and the next hash record
+     * @notice Verifies the oracle's entropy response against commitments and derives the final random number
+     * @dev Validates entropy B and C. Regarding the validation flags in the returned `Verified` struct:
+     *      - If **b** and **c** are both true, the verification business logic executed successfully.
+     *      - **b** will be false when the original hash identifier was zero. e.g., the first time an external contract makes a call. Don't use this number, make a new call.
+     *      - **c** may evaluate to false if the oracle's response takes more than 8,191 blocks, which is unlikely. Read this https://still.defining/docs
+     * @param hash The expected hash commitment to verify against
+     * @param entropy_request The original request structure containing seed A and the recorded block number
+     * @param entropy_response The response payload containing entropy B, entropy C, and the next round's hash commitment
+     * @return verified The populated Verified struct containing validation flags (b, c), the final random number, and the next hash record
      */
     function verify(bytes32 hash, EntropyRequest memory entropy_request, EntropyResponse calldata entropy_response) external view returns (Verified memory verified) {
         // Extract entropy B from the response payload
@@ -221,9 +223,10 @@ contract ABCEntropy is IABCEntropy {
         
         // Entropy C
         bytes32 entropy_c = entropy_response.entropy_c; // fallback value.
+        // Obtains the hash of the block in which the initial request was generated.
         (bool success, bytes memory data) = HISTORY.staticcall(abi.encode(entropy_request.block_number));
         if (verified.c = (success && data.length == 32)) {
-            entropy_c = abi.decode(data, (bytes32)); // externally obtained target value.
+            entropy_c = abi.decode(data, (bytes32));
         }
         
         // Combine entropy A entropy B and C to derive the final pseudorandom number

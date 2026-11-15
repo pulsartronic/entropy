@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nudge – Verifiable randomness for dapps</title>
-<meta name="description" content="Nudge is an on-chain random number service for dapp developers, powered by ABC entropy.">
+<title>ABC entropy – Verifiable randomness for dapps</title>
+<meta name="description" content="ABC Entropy is a lightweight commit-reveal randomness oracle designed to deliver verifiable, on-chain random numbers to your dApp with minimal friction.">
 
-<link rel="stylesheet" href="css/prism-duotone-sea.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-solidity.min.js"></script>
-			
+
 <style>
   /* ---------- Tokens: edit colors and fonts here ---------- */
   :root {
@@ -154,12 +154,11 @@
 
 <header>
   <div class="wrap">
-    <a class="brand" href="#">Nudge</a>
+    <a class="brand" href="#">ABC entropy</a>
     <nav aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#networks">Networks</a>
-      <a href="https://docs.example.com">Docs</a>
-      <a href="https://github.com/your-org/nudge">GitHub</a>
+      <a href="https://github.com/pulsartronic/entropy.git">GitHub</a>
     </nav>
   </div>
 </header>
@@ -170,11 +169,10 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <h1>Randomness your contract can prove.</h1>
-        <p class="lede">Nudge delivers verifiable random numbers to your dapp, generated with ABC entropy and checkable on-chain.</p>
+        <h1>Verifiable randomness for your smart contracts.</h1>
+        <p class="lede">ABC Entropy is a lightweight commit-reveal randomness oracle designed to deliver verifiable, on-chain random numbers to your dApp with minimal friction.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#start">Get started</a>
-          <a class="btn btn-ghost" href="https://docs.example.com">Read the docs</a>
+          <a class="btn btn-primary" href="#how">Get started</a>
         </div>
       </div>
       <pre><code class="language-solidity">
@@ -182,11 +180,11 @@
 pragma solidity ^0.8.20;
 
 // Request a random number.
-request = nudge.abc_entropy();
+request = abc_entropy.get();
 
 // Receive it in a callback.
 function entropy_callback(response) {
-	bytes32 entropy = sha256(A, B, C);
+	bytes32 entropy = keccak256(A, B, C);
 }
 	</code></pre>
 
@@ -198,16 +196,16 @@ function entropy_callback(response) {
 			<div class="wrap">
 				<h2>How ABC entropy works</h2>
 				<p class="lede">
-					Nudge uses a commit-reveal scheme to deliver its service by involving 3 key components.
+					This is a commit-reveal scheme built on three components, each contributing part of the final random number:
 				</p>
 				<ol class="steps">
 					<li>
-						<h3><span class="Component">A</span> Generator (us)</h3>
-						<p>We lock our entropy contribution behind a hash beforehand, allowing post-reveal verification.</p>
+						<h3><span class="Component">A</span> Your dapp users</h3>
+						<p>Your frontend provides the user's entropy contribution.</p>
 					</li>
 					<li>
-						<h3><span class="Component">B</span> Your dapp users</h3>
-						<p>Your frontend provides the user's entropy contribution.</p>
+						<h3><span class="Component">B</span> Generator (us)</h3>
+						<p>We lock our entropy contribution behind a hash beforehand, allowing post-reveal verification.</p>
 					</li>
 					<li>
 						<h3><span class="Component">C</span> Sequencer (Network)</h3>
@@ -215,14 +213,7 @@ function entropy_callback(response) {
 					</li>
 				</ol>
 				<p class="lede" style="margin-top: 2rem;">
-					Under the <span style="font-weight:bold;">ABC</span> model, as long as we aren't running the sequencer, the system remains entirely tamper-proof—even against us.
-					<br/>
-					<br/>
-					The biggest challenge in building a secure and verifiable random number generation service is protecting the customer from manipulation by the service provider itself.
-					<br/>
-					<br/>
-					
-					
+					As long as we aren't running the sequencer, the system remains tamper-proof, even against us. Read <a href="#model">Security model</a>
 				</p>
 			</div>
 		</section>
@@ -231,16 +222,11 @@ function entropy_callback(response) {
   <section id="code">
     <div class="wrap">
       <h2>Integrate in a few lines</h2>
-      <p class="muted">Contract, client, and verification examples. The full interface is in the docs.</p>
-      <!-- TODO: replace package names, function names and signatures with the real API. -->
+      <p class="muted">Below is an example consumer contract implementing `IEntropyConsumer` (see <a href="https://github.com/pulsartronic/entropy/blob/main/EntropyConsumerExample.sol" target="_blank">ABCEntropyExample.sol</a> for the full source code and detailed inline comments):</p>
       <div class="tabs">
         <input type="radio" name="tabs" id="tab-sol" checked>
-        <input type="radio" name="tabs" id="tab-ts">
-        <input type="radio" name="tabs" id="tab-verify">
         <div class="tab-labels">
           <label for="tab-sol">Solidity</label>
-          <label for="tab-ts">TypeScript</label>
-          <label for="tab-verify">Verify</label>
         </div>
         <div class="panels">
           <div class="panel" id="p-sol">
@@ -249,89 +235,60 @@ function entropy_callback(response) {
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@mrvifas/entropy/Definitions.sol";
+import "@pulsartronic/entropy/Definitions.sol";
 
-contract EntropyConsumerExample {
-	IScryptEntropy public scrypt_entropy;
+struct UserState {
+    EntropyRequest entropy_request;
+    HashRecord hash_record;
+}
 
-	mapping(address => UserState) public user_state_map;
+contract ABCEntropyExample is IEntropyConsumer {
+    IABCEntropy public abc_entropy;
+    mapping(address => UserState) public user_state_map;
+    event RandomEvent(address user, bytes32 random_number);
 
-	event RandomEvent(address user, bytes32 random_number);
+    constructor() {
+        // Arbitrum Sepolia example address.
+        abc_entropy = IABCEntropy(0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f);
+    }
 
-	constructor() {
-		// Arbitrum Sepolia example address. This should change depending on the chosen network.
-		scrypt_entropy = IScryptEntropy(0xd7Ca4e99F7C171B9ea2De80d3363c47009afaC5F);
-	}
+    function get_entropy(bytes32 user_entropy) external payable {
+        bytes memory a_seed = abi.encodePacked(user_entropy, msg.sender);
+        bytes32 entropy_a = keccak256(a_seed);
+        UserState storage user_state = user_state_map[msg.sender];
+        bytes32 callback_id = bytes32(uint256(uint160(msg.sender)));
+        uint256 callback_gas_limit = 50000;
+        uint256 fee = abc_entropy.get_fee(callback_gas_limit);
 
-	// This can be called by your users.
-	function get_entropy(bytes32 user_entropy) external payable {
-		// This is a chance for adding user generated entropy
-		// and make it different for different users sending the same user_entropy.
-		bytes memory a_seed = abi.encodePacked(user_entropy, msg.sender);
-		bytes32 entropy_a = sha256(a_seed);
-		// entropy_b is already fixed and behind a hash at this point.
-		// entropy_c is being generated.
-		
-		// Let's say we save entropy requests by User's addresses
-		// (notice we dont check for previous requests, you should).
-		UserState storage user_state = user_state_map[msg.sender];
+        // Request a randoom number.
+        user_state.entropy_request = abc_entropy.get{value: fee}(
+            callback_id,
+            callback_gas_limit,
+            user_state.hash_record.id,
+            entropy_a
+        );
+    }
 
-		// And bind callbacks in the same way. Entropy response will echo this value.
-		bytes32 callback_id = bytes32(uint256(uint160(msg.sender)));
+    function entropy_callback(
+    	bytes32 callback_id, EntropyResponse calldata entropy_response
+    ) external payable {
+        require(msg.sender == address(abc_entropy), "INVALID_PROVIDER");
+        address user = address(uint160(uint256(callback_id)));
+        UserState storage user_state = user_state_map[user];
 
-		// Example limit: callback_gas_limit depends on what you do in the response function.
-		// It could be statically pre calculated.
-		uint256 callback_gas_limit = 50000;
-		// Calculates fees.
-		uint256 fee = scrypt_entropy.get_fee(callback_gas_limit);
+        // Get the requested random number.
+        Verified memory verified = abc_entropy.verify(
+            user_state.hash_record.hash,
+            user_state.entropy_request,
+            entropy_response
+        );
 
-		// Request a random number. It makes the call and returns and EntropyRequest struct
-		// needed for verification.
-		// You could check:
-		//   a) entropy_request.seed == seed
-		//   b) entropy_request.block_number == some_method_to_get_it
-		// You can also check its public code at http://docs.com
-		user_state.entropy_request = scrypt_entropy.abc_entropy{value:fee}(
-			callback_id,
-			callback_gas_limit,
-			user_state.hash_record.id,
-			entropy_a
-		);
-	}
-
-	// Entropy response callback.
-	function entropy_callback(
-		bytes32 callback_id, EntropyResponse calldata entropy_response
-	) external payable {
-		// Check who's calling this function, it's public.
-		require(msg.sender == address(scrypt_entropy), "INVALID PROVIDER");
-
-		// Obtain the corresponding UserState (remember this is an example).
-		address user = address(uint160(uint256(callback_id)));
-		UserState storage user_state = user_state_map[user];
-		
-		// Verify received data using our "verify" function.
-		// If you want to use a different method read its
-		// public code to see what it does at http://docs.com
-		Verified memory verified = scrypt_entropy.verify(
-			user_state.hash_record.hash,
-			user_state.entropy_request,
-			entropy_response
-		);
-		
-		if (!verified.c) {
-			// this can happens if this response took more than 8190 blocks, which is unlikelly.
-			// If this happen, you still have the chance to verify this operation off-chain.
-			// Read the docs at http://docs.com
-		}
-
-		if (verified.b || bytes32(0) == user_state.hash_record.hash) {
-			// Save next round commitment.
-			user_state.hash_record = verified.next_hash_record;
-			// emit obtained random number ...
-			emit RandomEvent(user, verified.random_number);
-		}
-	}
+        // Emit an event with the generated random number.
+        if (verified.b || bytes32(0) == user_state.hash_record.hash) {
+            user_state.hash_record = verified.next_hash_record;
+            emit RandomEvent(user, verified.random_number);
+        }
+    }
 }
 				</code></pre>
           </div>
@@ -344,7 +301,6 @@ contract EntropyConsumerExample {
   <section>
     <div class="wrap">
       <h2>Built for production dapps</h2>
-      <!-- TODO: only keep claims you can back with numbers or links. -->
       <div class="features">
         <div>
           <h3>Verifiable</h3>
@@ -352,11 +308,11 @@ contract EntropyConsumerExample {
         </div>
         <div>
           <h3>Fast</h3>
-          <p>Results arrive in your callback within [X] seconds on supported chains.</p>
+          <p>Results arrive in your callback within a few seconds on supported chains.</p>
         </div>
         <div>
           <h3>Predictable cost</h3>
-          <p>One flat fee per request, readable from the contract with <code>getFee()</code>.</p>
+          <p>One flat fee per request, readable from the contract with <code>get_fee()</code>.</p>
         </div>
         <div>
           <h3>Simple to integrate</h3>
@@ -370,17 +326,30 @@ contract EntropyConsumerExample {
   <section id="networks">
     <div class="wrap">
       <h2>Supported networks</h2>
-      <p class="muted">Contract addresses, fees, and typical response times.</p>
-      <!-- TODO: keep this table up to date; it is the part that will change most. -->
       <div class="table-scroll">
         <table>
           <thead>
-            <tr><th>Network</th><th>Contract</th><th>Fee per request</th><th>Typical latency</th></tr>
+            <tr><th>Mainnets</th><th>Contract</th><th>Fee per request</th></tr>
           </thead>
           <tbody>
-            <tr><td>Ethereum</td><td><code>0x0000…0000</code></td><td>0.000 ETH</td><td>[X] s</td></tr>
-            <tr><td>Base</td><td><code>0x0000…0000</code></td><td>0.000 ETH</td><td>[X] s</td></tr>
-            <tr><td>Arbitrum</td><td><code>0x0000…0000</code></td><td>0.000 ETH</td><td>[X] s</td></tr>
+            <tr><td>Ethereum</td><td><code>0x0000…0000</code></td><td>0.000 wei</td></tr>
+            <tr><td>Base</td><td><code>0x0000…0000</code></td><td>0.000 wei</td></tr>
+            <tr><td>Arbitrum</td><td><code>0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f</code></td><td>0.000 wei</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Testnets</th><th>Contract</th><th>Fee per request</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ethereum</td><td><code>0x0000…0000</code></td><td>0.000 wei</td></tr>
+            <tr><td>Base</td><td><code>0x0000…0000</code></td><td>0.000 wei</td></tr>
+            <tr><td>Arbitrum</td><td><code>0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f</code></td><td>0.000 wei</td></tr>
           </tbody>
         </table>
       </div>
@@ -388,12 +357,29 @@ contract EntropyConsumerExample {
   </section>
 
 	<!-- SECURITY -->
-	<section>
+	<section id="model">
 		<div class="wrap">
 		<h2>Security Model</h2>
-			<p>The contracts and the ABC entropy specification are open source, so you can read exactly what your dapp depends on.</p>
-			<!-- TODO: add audit reports and a short description of the trust model. -->
-			<p class="muted">Audits: <a href="#">link to report</a> · Source: <a href="https://github.com/your-org/nudge">GitHub</a> · Spec: <a href="#">ABC entropy paper</a></p>
+			<p>ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party—including us, the service provider—from predicting, altering, or rigging the final outcome.</p>
+			<h3>How the Trust Guarantee Works</h3>
+			<p>The final random number is derived by combining three independent entropy sources:</p>
+			<code>random_number = keccak256(A, B, C)</code>
+
+			<ol>
+				<li>Entropy A (The User/dApp): Your frontend or user supplies their own entropy contribution during the request.</li>
+				<li>Entropy B (The Provider Commitment): We lock our entropy contribution behind a cryptographic hash before you make a request. Once committed, it is permanently locked and cannot be modified.</li>
+				<li>Entropy C (The Sequencer): An independent third-party network layer introduces block-level entropy at the moment your dApp makes a request.</li>
+			</ol>
+			<h3>Defending Against Provider Manipulation</h3>
+			<p>The core challenge in building a verifiable random number oracle is preventing us from acting as a privileged user within your dApp.</p>
+
+			<p>ABC Entropy neutralizes this threat through Entropy C:</p>
+			<ol>
+				<li>Because Entropy C is generated after our commitment (but before revealing it) and after your request, neither you nor us nor the sequencer can know all A, B and C values in advance.</li>
+				<li>Even though we could know Entropies A and B in advance (by acting as a user), the unpredictable nature of C prevents any pre-calculation or manipulation of the final result.</li>
+			</ol>
+			<h3>Trust Assumptions</h3>
+			<p>This security model remains fully tamper-proof as long as the service provider (us) does not control the entity generating Entropy C. We mitigate this risk by letting you choose your preferred sequencer from an open list —making it highly unlikely that a single provider controls all available options.</p>
 		</div>
 	</section>
 
@@ -401,10 +387,9 @@ contract EntropyConsumerExample {
   <section id="start" class="cta">
     <div class="wrap">
       <h2>Get your first random number</h2>
-      <p>Install the SDK, add the contract interface, and send a test request on a testnet.</p>
-<pre><code>npm install @nudge/sdk</code></pre>
+      <p>Open our example contract in remix and obtain your first random number.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="https://docs.example.com/quickstart">Open the quickstart</a>
+        <a class="btn btn-primary" href="https://app.remix.live/pulsartronic/entropy/blob/main/ABCEntropyExample.sol">Open in Remix</a>
       </div>
     </div>
   </section>
@@ -413,13 +398,9 @@ contract EntropyConsumerExample {
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Nudge</span>
+    <span>© 2026 pulsartronic</span>
     <nav aria-label="Footer">
-      <a href="https://docs.example.com">Docs</a>
-      <a href="https://github.com/your-org/nudge">GitHub</a>
-      <a href="https://discord.gg/your-invite">Discord</a>
-      <a href="https://x.com/your-handle">X</a>
-      <a href="mailto:hello@example.com">Contact</a>
+      <a href="https://github.com/pulsartronic/entropy.git">GitHub</a>
     </nav>
   </div>
 </footer>
