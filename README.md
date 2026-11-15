@@ -33,7 +33,7 @@ Below is an example consumer contract implementing `IEntropyConsumer` (see [`ABC
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./Definitions.sol";
+import "@pulsartronic/entropy/Definitions.sol";
 
 struct UserState {
     EntropyRequest entropy_request;
@@ -87,7 +87,17 @@ contract ABCEntropyExample is IEntropyConsumer {
     }
 }
 ```
+## Quick Test Guide in Remix
 
+1. **Open the Contract:** Click [Open in Remix](https://app.remix.live/pulsartronic/entropy/blob/main/ABCEntropyExample.sol).
+2. **Compile:** Go to the **Solidity Compiler** tab on the left, select version `0.8.20` (or higher), and click **Compile ABCEntropyExample.sol**.
+3. **Deploy & Test on Arbitrum Sepolia:**
+   - Switch your Web3 wallet (MetaMask) to **Arbitrum Sepolia**.
+   - Go to the **Deploy & Run Transactions** tab.
+   - Set *Environment* to **Injected Provider - MetaMask**.
+   - The contract is pre-configured with the testnet oracle address (`0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f`).
+   - Call `get_entropy` passing some test bytes32 data (e.g., `0x1234...`) and attach the required ETH fee (check `get_fee` first if needed)!
+  
 ## Features
 
 - **Verifiable:** every number ships with a proof that anyone can check on-chain.
