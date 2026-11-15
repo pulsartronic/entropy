@@ -46,7 +46,8 @@ contract ABCEntropyExample is IEntropyConsumer {
     event RandomEvent(address user, bytes32 random_number);
 
     constructor() {
-        abc_entropy = IABCEntropy(0xd7Ca4e99F7C171B9ea2De80d3363c47009afaC5F);
+        // Arbitrum Sepolia example address.
+        abc_entropy = IABCEntropy(0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f);
     }
 
     function get_entropy(bytes32 user_entropy) external payable {
@@ -56,6 +57,8 @@ contract ABCEntropyExample is IEntropyConsumer {
         bytes32 callback_id = bytes32(uint256(uint160(msg.sender)));
         uint256 callback_gas_limit = 50000;
         uint256 fee = abc_entropy.get_fee(callback_gas_limit);
+
+        // Request a randoom number.
         user_state.entropy_request = abc_entropy.get{value: fee}(
             callback_id,
             callback_gas_limit,
@@ -64,17 +67,19 @@ contract ABCEntropyExample is IEntropyConsumer {
         );
     }
 
-    function entropy_callback(
-        bytes32 callback_id, EntropyResponse calldata entropy_response
-    ) external payable {
+    function entropy_callback(bytes32 callback_id, EntropyResponse calldata entropy_response) external payable {
         require(msg.sender == address(abc_entropy), "INVALID_PROVIDER");
         address user = address(uint160(uint256(callback_id)));
         UserState storage user_state = user_state_map[user];
+
+        // Get the requested random number.
         Verified memory verified = abc_entropy.verify(
             user_state.hash_record.hash,
             user_state.entropy_request,
             entropy_response
         );
+
+        // Emit an event with the generated random number.
         if (verified.b || bytes32(0) == user_state.hash_record.hash) {
             user_state.hash_record = verified.next_hash_record;
             emit RandomEvent(user, verified.random_number);
@@ -92,13 +97,18 @@ contract ABCEntropyExample is IEntropyConsumer {
 
 ## Supported networks
 
-| Network | Contract | Fee per request | Typical latency |
-|---|---|---|---|
-| Ethereum | `0x0000…0000` | 0.000 ETH | [X] s |
-| Base | `0x0000…0000` | 0.000 ETH | [X] s |
-| Arbitrum | `0x0000…0000` | 0.000 ETH | [X] s |
+### Mainnets
+| Network | Contract |
+|---|---|
+| Ethereum | `0x0000000000000000000000000000000000000000` |
+| Arbitrum | `0x0000000000000000000000000000000000000000` |
 
-<!-- TODO: keep this table up to date; it is the part that will change most. -->
+### Testnets
+| Network | Contract |
+|---|---|
+| Ethereum | `0x492170C151777b7839d9c4cDD58448f0Deca9bcB` |
+| Arbitrum | `0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f` |
+
 
 ## Security model
 
