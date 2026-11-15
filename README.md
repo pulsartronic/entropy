@@ -95,7 +95,7 @@ contract ABCEntropyExample is IEntropyConsumer {
    - Switch your Web3 wallet (MetaMask) to **Arbitrum Sepolia**.
    - Go to the **Deploy & Run Transactions** tab.
    - Set *Environment* to **Injected Provider - MetaMask**.
-   - The contract is pre-configured with the testnet oracle address (`0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f`).
+   - The contract is pre-configured with the testnet oracle address (`0x295A56c7ed8083c33c23C125187A0E840dc7E379`).
    - Call `get_entropy` passing some test bytes32 data (e.g., `0x1234...`) and attach the required ETH fee (check `get_fee` first if needed)!
   
 ## Features
@@ -117,7 +117,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Network | Contract |
 |---|---|
 | Ethereum | `0x492170C151777b7839d9c4cDD58448f0Deca9bcB` |
-| Arbitrum | `0xBfBfcbc03E3A3c40656b23fcfdb96A48232B8C3f` |
+| Arbitrum | `0x295A56c7ed8083c33c23C125187A0E840dc7E379` |
 
 
 ## Security model
