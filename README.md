@@ -122,7 +122,30 @@ contract ABCEntropyExample is IEntropyConsumer {
 
 ## Security model
 
-Security model details and threat analysis coming soon...
+ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party—including us, the service provider—from predicting, altering, or rigging the final outcome.
+
+### How the Trust Guarantee Works
+
+The final random number is derived by combining three independent entropy sources:
+
+```random_number = keccak256(A, B, C)```
+
+1. **Entropy A (The User/dApp):** Your frontend or user supplies their own entropy contribution during the request.
+2. **Entropy B (The Provider Commitment):** We lock our entropy contribution behind a cryptographic hash before you make a request. Once committed, it is permanently locked and cannot be modified.
+3. **Entropy C (The Sequencer):** An independent third-party network layer introduces block-level entropy at the moment your dApp makes a request.
+
+### Defending Against Provider Manipulation
+
+The core challenge in building a verifiable random number oracle is preventing us from acting as a privileged user within your dApp.
+
+ABC Entropy neutralizes this threat through **Entropy C**:
+- Because Entropy C is generated **after** our commitment (but before revealing it) and **after** your request, neither you nor us nor the sequencer can know all A, B and C values in advance. 
+- Even though we could know Entropies A and B in advance (by acting as a user), the unpredictable nature of C prevents any pre-calculation or manipulation of the final result.
+
+### Trust Assumptions
+
+This security model remains fully tamper-proof as long as the service provider (us) does not control the entity generating Entropy C.
+We mitigate this risk by letting you choose your preferred sequencer from an open list —making it highly unlikely that a single provider controls all available options.
 
 ## License
 
