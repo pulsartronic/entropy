@@ -67,7 +67,9 @@ contract ABCEntropyExample is IEntropyConsumer {
         );
     }
 
-    function entropy_callback(bytes32 callback_id, EntropyResponse calldata entropy_response) external payable {
+    function entropy_callback(
+        bytes32 callback_id, EntropyResponse calldata entropy_response
+    ) external payable {
         require(msg.sender == address(abc_entropy), "INVALID_PROVIDER");
         address user = address(uint160(uint256(callback_id)));
         UserState storage user_state = user_state_map[user];
