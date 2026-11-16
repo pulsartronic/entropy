@@ -102,21 +102,29 @@ contract ABCEntropyExample is IEntropyConsumer {
             entropy_response
         );
         
-        // Flag c may evaluate to false if the oracle response takes more than 8,191 blocks (highly unlikely).
+		// 'verified.b' is the core boolean validation flag that checks whether the 
+		// submitted response cryptographically matches the user's prior hash commitment.
+		// It may evaluate to false under two distinct scenarios:
+		// 1. Initial Interaction / Bootstrap: There is no prior hash commitment recorded yet 
+		//    (i.e., `bytes32(0) == user_state.hash_record.hash`). Persisting `verified.next_hash_record` 
+		//    establishes the genesis link in the hash chain, ensuring all subsequent requests have `verified.b` set to true.
+		// 2. Emergency Seed Compromise (Break-Glass): We do not routinely or plan to rotate the seed under normal conditions. 
+		//    However, if the active generation seed is ever compromised, an emergency seed rotation is required, 
+		//    which invalidates prior commitments and causes `verified.b` to evaluate to false.
+		if (!verified.b) {
+			// Just make your dApp request a new number.
+		}
+        
+        // Flag 'verified.c' may evaluate to false if the oracle response takes more than 8,191 blocks (highly unlikely).
         // If this occurs, off-chain verification can still be performed by inspecting event logs.
         if (!verified.c) {
             // Optional: handle delayed responses or fallback logging here.
         }
-
-        // Proceed if flag b is true, or if this is the initial interaction (where the hash is bytes32(0)).
-        // On this first call, b is false because there is no prior commitment, but saving verified.next_hash_record
-        // establishes the first link in the hash chain, ensuring all subsequent requests have verified.b set to true.
-        if (verified.b || bytes32(0) == user_state.hash_record.hash) {
-            // Update the user's hash record with the next commitment for future rounds.
-            user_state.hash_record = verified.next_hash_record;
-            
-            // Emit the generated random number to client listeners.
-            emit RandomEvent(user, verified.random_number);
-        }
+        
+        // Update the user's hash record with the next commitment for future rounds.
+        user_state.hash_record = verified.next_hash_record;
+        
+        // Emit the generated random number to client listeners.
+        emit RandomEvent(user, verified.random_number);
     }
 }

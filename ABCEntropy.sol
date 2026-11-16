@@ -38,9 +38,14 @@ interface ArbSys {
  */
 contract ABCEntropy is IABCEntropy {
     /**
-     * @notice The address of the designated operator with administrative privileges
+     * @notice The address of the designated operator
      */
     address public operator;
+
+    /**
+     * @notice The address of the designated administrator
+     */
+    address public admin;
 
     /**
      * @notice The flat fee amount charged for operations, denominated in wei
@@ -86,15 +91,33 @@ contract ABCEntropy is IABCEntropy {
     event CallbackFailedEvent(address indexed app, bytes32 indexed callback_id);
 
     /**
+     * @notice Emitted when a transfer to the operator fails.
+     * @dev We should monitor this event to handle execution errors appropriately
+     * @param operator The address with the transfer
+     * @param balnce The failed to transfer amount.
+     */
+    event TransferFailedEvent(address operator, uint256 balnce);
+
+    /**
      * @notice Initializes the contract, setting the deployer as the operator and configuring initial fee and gas price parameters
      * @dev Assigns msg.sender to the operator state variable and initializes core configuration values
      * @param initial_fee The initial fee amount required for contract operations
      * @param initial_gas_price The initial gas price configuration value
      */
-	constructor(uint256 initial_fee, uint256 initial_gas_price) {
+	constructor(address initial_admin, uint256 initial_fee, uint256 initial_gas_price) {
+        admin = initial_admin;
         operator = msg.sender;
         fee = initial_fee;
         gas_price = initial_gas_price;
+	}
+
+	/**
+     * @notice Restricts function execution to the designated administrator
+     * @dev Reverts with "INVALID_CALLER" if the message sender is not the authorized admin
+     */
+	modifier only_admin() {
+		require(msg.sender == admin, "INVALID_CALLER");
+		_;
 	}
 
 	/**
@@ -111,7 +134,8 @@ contract ABCEntropy is IABCEntropy {
      * @dev Restricted to the current operator via the only_operator modifier
      * @param new_operator The address of the new operator
      */
-    function set_operator(address new_operator) external only_operator {
+    function set_operator(address new_operator, address new_admin) external only_admin {
+        admin = new_admin;
         operator = new_operator;
     }
 
@@ -120,7 +144,7 @@ contract ABCEntropy is IABCEntropy {
      * @dev Reverts if the contract balance is zero or if the low-level transfer fails
      * @param recipient The address to receive the withdrawn funds
      */
-	function withdraw(address recipient) external only_operator {
+	function withdraw(address recipient) external only_admin {
 		uint256 balance = address(this).balance;
 		require(balance > 0, "NO_FUNDS_TO_WITHDRAW");
 		(bool success, ) = payable(recipient).call{value: balance}("");
@@ -169,12 +193,22 @@ contract ABCEntropy is IABCEntropy {
         // Ensure the attached ETH value meets the required fee
         require(msg.value >= total_fee, "INSUFFICIENT_FEE");
         
+        // Get the total ETH balance currently held by the contract.
+        uint256 balance = address(this).balance;
+        // Send the entire contract balance to the operator address.
+        (bool success, ) = payable(operator).call{value: balance}("");
+        // Check if the transfer failed, and if so, emit a custom event.
+        if (!success) {
+            // This should never happen.
+            emit TransferFailedEvent(operator, balance);
+        }
+
         // Store seed A in the request structure
         request_data.entropy_a = entropy_a;
         
         // Capture the current block number.
-        //request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
-        request_data.block_number = block.number;
+        request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
+        //request_data.block_number = block.number;
 
         // Emit the request event for off-chain oracle listeners
         emit RequestEvent(msg.sender, callback_id, gas_limit, hash_record_id);
@@ -238,4 +272,5 @@ contract ABCEntropy is IABCEntropy {
         verified.next_hash_record.hash = entropy_response.next_hash_b;
     }
 }
+
 
