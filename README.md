@@ -80,10 +80,8 @@ contract ABCEntropyExample is IEntropyConsumer {
         );
 
         // Emit an event with the generated random number.
-        if (verified.b || bytes32(0) == user_state.hash_record.hash) {
-            user_state.hash_record = verified.next_hash_record;
-            emit RandomEvent(user, verified.random_number);
-        }
+        user_state.hash_record = verified.next_hash_record;
+        emit RandomEvent(user, verified.random_number);
     }
 }
 ```
