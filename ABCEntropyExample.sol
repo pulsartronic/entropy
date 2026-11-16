@@ -40,7 +40,7 @@ contract ABCEntropyExample is IEntropyConsumer {
      */
     constructor() {
         // Arbitrum Sepolia example address. This should be configured per target network.
-        abc_entropy = IABCEntropy(0x295A56c7ed8083c33c23C125187A0E840dc7E379);
+        abc_entropy = IABCEntropy(0x29A269640D240B4d08e74b2564832aEcA00484FC);
     }
 
     /**
@@ -102,21 +102,19 @@ contract ABCEntropyExample is IEntropyConsumer {
             entropy_response
         );
         
-		// 'verified.b' is the core boolean validation flag that checks whether the 
-		// submitted response cryptographically matches the user's prior hash commitment.
-		// It may evaluate to false under two distinct scenarios:
-		// 1. Initial Interaction / Bootstrap: There is no prior hash commitment recorded yet 
-		//    (i.e., `bytes32(0) == user_state.hash_record.hash`). Persisting `verified.next_hash_record` 
-		//    establishes the genesis link in the hash chain, ensuring all subsequent requests have `verified.b` set to true.
-		// 2. Emergency Seed Compromise (Break-Glass): We do not routinely or plan to rotate the seed under normal conditions. 
-		//    However, if the active generation seed is ever compromised, an emergency seed rotation is required, 
-		//    which invalidates prior commitments and causes `verified.b` to evaluate to false.
-		if (!verified.b) {
+		// 'verified.b' checks whether the response cryptographically matches 
+		// our prior committed hash in the hash chain.
+		// It evaluates to false on the initial interaction (bootstrap) where 
+		// no prior hash commitment exists yet (i.e., `bytes32(0) == user_state.hash_record.hash`).
+		// Saving `verified.next_hash_record` establishes the genesis link for future validations.
+        if (!verified.b) {
 			// Just make your dApp request a new number.
 		}
         
-        // Flag 'verified.c' may evaluate to false if the oracle response takes more than 8,191 blocks (highly unlikely).
-        // If this occurs, off-chain verification can still be performed by inspecting event logs.
+		// 'verified.c' checks whether the sequencer entropy was obtained properly.
+		// It evaluates to false if the response takes 
+		// more than 8,191 blocks (which is highly unlikely under normal operation).
+		// If this occurs, off-chain verification can still be performed by inspecting event logs.
         if (!verified.c) {
             // Optional: handle delayed responses or fallback logging here.
         }

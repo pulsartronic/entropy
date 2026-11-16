@@ -47,7 +47,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 
     constructor() {
         // Arbitrum Sepolia example address.
-        abc_entropy = IABCEntropy(0x295A56c7ed8083c33c23C125187A0E840dc7E379);
+        abc_entropy = IABCEntropy(0x29A269640D240B4d08e74b2564832aEcA00484FC);
     }
 
     function get_entropy(bytes32 user_entropy) external payable {
@@ -95,7 +95,7 @@ contract ABCEntropyExample is IEntropyConsumer {
    - Switch your Web3 wallet (MetaMask) to **Arbitrum Sepolia**.
    - Go to the **Deploy & Run Transactions** tab.
    - Set *Environment* to **Injected Provider - MetaMask**.
-   - The contract is pre-configured with the testnet oracle address (`0x295A56c7ed8083c33c23C125187A0E840dc7E379`).
+   - The contract is pre-configured with the testnet oracle address (`0x29A269640D240B4d08e74b2564832aEcA00484FC`).
    - Call `get_entropy` passing some test bytes32 data (e.g., `0x1234...`) and attach the required ETH fee (check `get_fee` first if needed)!
   
 ## Features
