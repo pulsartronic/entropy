@@ -120,7 +120,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 
 ## Security model
 
-ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party—including us, the service provider—from predicting, altering, or rigging the final outcome.
+ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party from predicting, altering, or rigging the final outcome.
 
 ### How the Trust Guarantee Works
 
