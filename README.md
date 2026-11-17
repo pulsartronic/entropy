@@ -120,25 +120,16 @@ contract ABCEntropyExample is IEntropyConsumer {
 
 ## Security model
 
-ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party from predicting, altering, or rigging the final outcome.
-
-### How the Trust Guarantee Works
-
-The final random number is derived by combining three independent entropy sources:
+ABC Entropy relies on a cryptographically secure commit-reveal architecture designed to prevent any single party from predicting, altering, or rigging the final outcome. The resulting random number is derived by combining three independent entropy sources:
 
 ```random_number = keccak256(A, B, C)```
 
-1. **Entropy A (The User/dApp):** Your frontend or user supplies their own entropy contribution during the request.
-2. **Entropy B (The Provider Commitment):** We lock our entropy contribution behind a cryptographic hash before you make a request. Once committed, it is permanently locked and cannot be modified.
-3. **Entropy C (The Sequencer):** An independent third-party network layer introduces block-level entropy at the moment your dApp makes a request.
+Mitigating external threats is "easy". The core challenge in building a verifiable random number oracle is preventing ourselves from acting as a privileged user within your dApp.
 
-### Defending Against Provider Manipulation
-
-The core challenge in building a verifiable random number oracle is preventing us from acting as a privileged user within your dApp.
-
-ABC Entropy neutralizes this threat through **Entropy C**:
-- Because Entropy C is generated **after** our commitment (but before revealing it) and **after** your dApp request, neither you nor us nor the sequencer can know all A, B and C values in advance. 
+This threat is neutralized through **Entropy C**:
+- Because Entropy C is generated **after** our commitment (but before revealing it) and **after** your dApp request, neither you nor us nor the sequencer can know all A, B and C values in advance.
 - Even though we could know Entropies A and B in advance (by acting as a user), the unpredictable nature of C prevents any pre-calculation or manipulation of the final result.
+- Something similar happens to the sequencer where it could know Entropies A and C in advance, but not B
 
 ### Trust Assumptions
 
