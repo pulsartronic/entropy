@@ -110,7 +110,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 ### Mainnets
 | Network | Contract |
 |---|---|
-| Arbitrum | `0x0000000000000000000000000000000000000000` |
+| Arbitrum | `0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9` |
 
 ### Testnets
 | Network | Contract |
