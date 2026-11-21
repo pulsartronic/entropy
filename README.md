@@ -124,6 +124,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Optimism | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://testnet-explorer.optimism.io/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9?tab=contract) |
 | BNB Chain | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://testnet.bscscan.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB#code) |
 | Monad | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://testnet.monadscan.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9#code) |
+| Abstract | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://explorer.testnet.abs.xyz/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9#contract) |
 
 
 ## Security model
