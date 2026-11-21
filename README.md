@@ -120,7 +120,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Network | Contract |
 |---|---|
 | Arbitrum | [`0x29A269640D240B4d08e74b2564832aEcA00484FC`](https://sepolia.arbiscan.io/address/0x29A269640D240B4d08e74b2564832aEcA00484FC) |
-| Base | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://sepolia.basescan.org//address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
+| Base | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://sepolia.basescan.org/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
 | Optimism | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://testnet-explorer.optimism.io/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
 | BNB Chain | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://testnet.bscscan.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB) |
 
