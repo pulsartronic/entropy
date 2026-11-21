@@ -207,8 +207,8 @@ contract ABCEntropy is IABCEntropy {
         request_data.entropy_a = entropy_a;
         
         // Capture the current block number.
-        request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
-        //request_data.block_number = block.number;
+        // request_data.block_number = arb_sys.arbBlockNumber(); // Alternative block number fallback if deployed on Arbitrum networks
+        request_data.block_number = block.number;
 
         // Emit the request event for off-chain oracle listeners
         emit RequestEvent(msg.sender, callback_id, gas_limit, hash_record_id);
