@@ -113,6 +113,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Arbitrum | `0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9` |
 | Base | `0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB` |
 | Optimism | `0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB` |
+| BNB Chain | `0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB` |
 
 
 ### Testnets
