@@ -91,6 +91,8 @@ contract ABCEntropyExample is IEntropyConsumer {
             entropy_response
         );
 
+        // See ABCEntropyExample.sol for verification logic.
+
         // Emit an event with the generated random number.
         user_state.hash_record = verified.next_hash_record;
         emit RandomEvent(user, verified.random_number);
