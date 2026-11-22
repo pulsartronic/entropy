@@ -114,7 +114,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Base | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://base.blockscout.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB?tab=contract) |
 | Optimism | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://explorer.optimism.io/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB?tab=contract) |
 | Binance | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://bscscan.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB#code) |
-| Monad | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://monadscan.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
+| Monad | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://monadscan.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9#code) |
 
 ### Testnets
 | Network | Contract |
