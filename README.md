@@ -123,7 +123,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Network | Contract |
 |---|---|
 | Monad | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://monadscan.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9#code) |
-| Arbitrum | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://arbiscan.io/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
+| Arbitrum One | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://arbiscan.io/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9) |
 | Optimism | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://explorer.optimism.io/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB?tab=contract) |
 | Base | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://base.blockscout.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB?tab=contract) |
 | Binance | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://bscscan.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB#code) |
@@ -132,7 +132,7 @@ contract ABCEntropyExample is IEntropyConsumer {
 | Network | Contract |
 |---|---|
 | Monad | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://testnet.monadscan.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9#code) |
-| Arbitrum | [`0x29A269640D240B4d08e74b2564832aEcA00484FC`](https://sepolia.arbiscan.io/address/0x29A269640D240B4d08e74b2564832aEcA00484FC) |
+| Arbitrum One | [`0x29A269640D240B4d08e74b2564832aEcA00484FC`](https://sepolia.arbiscan.io/address/0x29A269640D240B4d08e74b2564832aEcA00484FC) |
 | Optimism | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://testnet-explorer.optimism.io/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9?tab=contract) |
 | Base | [`0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9`](https://base-sepolia.blockscout.com/address/0x16C208E0e2B8Df76f11A7085B3e306A27455F9F9?tab=contract) |
 | Binance | [`0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB`](https://testnet.bscscan.com/address/0x15f31ab7371C02E2a505f569Eea9057AA75CaBAB#code) |
