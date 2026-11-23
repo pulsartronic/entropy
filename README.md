@@ -1,4 +1,4 @@
-# ABC Entropy
+# Pulsartronic ABC entropy
 
 **Verifiable, tamper-proof randomness for your smart contracts.**
 
