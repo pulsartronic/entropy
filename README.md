@@ -155,7 +155,7 @@ Mitigating external threats is "easy". The core challenge in building a verifiab
 This threat is neutralized through **Entropy C**:
 
 - Even though we could know Entropies A and B in advance (by acting as a user), we couldn't know C before we commit to A and B, which prevents any pre-calculation.
-- Something similar would happen to the Sequencer where it could know Entropies A and C in advance, but not B.
+- Something similar would happen to the Sequencer, which could know Entropies A and C in advance, but not B.
 
 ### Trust Assumptions
 
